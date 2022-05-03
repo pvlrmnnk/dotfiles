@@ -1,17 +1,20 @@
 [user]
 	name = Pavlo Romanenko
 	email = mail@pvlrmnnk.com
-
 	signingkey = 8EB405E0346ACBC0CB6DE96C51FC89D601F449F6
 
 [commit]
 	gpgsign = true
+
 [tag]
 	gpgsign = true
 
 [pull]
 	ff = only
+
 [init]
 	defaultBranch = main
+
 [gpg]
 	program = /usr/local/bin/gpg
+
