@@ -4,4 +4,4 @@
 
 [diff]
     command = "code"
-    args = ["--diff", "{{ .Destination }}", "{{ .Target }}"]
+    args = ["--wait", "--diff", "{{ .Destination }}", "{{ .Target }}"]
