@@ -1,7 +1,7 @@
 [edit]
     command = "code"
-    args = ["--wait"]
+    args = ["--new-window", "--wait"]
 
 [diff]
     command = "code"
-    args = ["--wait", "--diff", "{{ .Destination }}", "{{ .Target }}"]
+    args = ["--new-window", "--wait", "--diff", "{{ .Destination }}", "{{ .Target }}"]
