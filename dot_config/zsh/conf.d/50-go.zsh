@@ -10,37 +10,39 @@ install_go() {
         return 1
     fi
 
-    local current_dir=$(pwd)
     local temp_dir=$(mktemp -d)
     local sdk_dir="${HOME}/.gosdk"
     local install_dir="${sdk_dir}/go${version}"
-    local package_name="go${version}.darwin-amd64.tar.gz"
-    local download_link="https://go.dev/dl/${package_name}"
 
-    cd $(mktemp -d)
+    local archive_name="go${version}.darwin-amd64.tar.gz"
+    local archive_url="https://go.dev/dl/${archive_name}"
+    local archive_path="${temp_dir}/${archive_name}"
 
-    echo "Downloading from ${download_link}"
-    wget -q ${download_link}
+    echo "Downloading ${archive_url} to ${archive_path}"
+    curl --fail -s -L -o $archive_path $archive_url
     if [ $? -ne 0 ]; then
-        echo "Unable to download package from ${download_link}"
-        cd ${current_dir}
+        echo "Unable to download ${archive_url}"
+        rm -rf $temp_dir
         return 1
     fi
 
-    echo "Unpacking ${package_name}"
-    tar -xf ${package_name}
+    echo "Unarchiving ${archive_path} to ${install_dir}"
+    rm -rf $install_dir
+    mkdir -p $install_dir
+    tar -xf $archive_path -C $install_dir --strip-components=1
     if [ $? -ne 0 ]; then
-        echo "Unable to upack package ${package_name}"
-        cd ${current_dir}
+        echo "Unable to unarchive ${archive_path}"
+        rm -rf $temp_dir
         return 1
     fi
 
-    echo "Moving to ${install_dir}"
-    mkdir -p ${install_dir}
-    mv ./go/* ${install_dir}
+    rm -rf $temp_dir
 
-    cd ${current_dir}
-    rm -rf ${temp_dir}
+    local go="${install_dir}/bin/go"
 
-    ${install_dir}/bin/go version
+    echo "\n"
+    echo "🎉 $($go version)"
+    echo "\n"
+    echo "export GOROOT=\"${install_dir}\""
+    echo "export PATH=\"\${GOROOT}/bin:\${PATH}\""
 }
