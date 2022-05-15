@@ -3,3 +3,5 @@ unalias which-command >/dev/null 2>&1
 
 alias za="alias"               # Zsh Alias
 alias zs="source $HOME/.zshrc" # Zsh Source
+
+export PATH="${HOME}/.local/bin:${PATH}"
