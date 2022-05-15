@@ -21,7 +21,9 @@ _check_args() {
         return 1
     fi
 
-    echo "Go version to be installed: ${1}"
+    local ver="${1}"
+
+    echo "Go version to be installed: ${ver}"
 }
 
 _check_cmd() {
