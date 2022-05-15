@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+_step() {
+    local msg="${1}"
+
+    local bold_white_color='\033[1;97m'
+    local bold_blue_color='\033[1;34m'
+    local no_color='\033[0m'
+
+    echo -e "${bold_blue_color}==> ${bold_white_color}${msg}${no_color}"
+}
+
+_check_args() {
+    if [ ${#} -eq 0 ]; then
+        echo "Not enough arguments"
+        return 1
+    elif [ ${#} -ge 2 ]; then
+        echo "Too many arguments"
+        return 1
+    fi
+
+    echo "Go version to be installed: ${1}"
+}
+
+_check_cmd() {
+    local cmd="${1}"
+
+    command -V "${cmd}"
+}
+
+_print_go_info() {
+    local go_cmd="${1}"
+
+    echo "GOVERSION=$(${go_cmd} env GOVERSION)"
+    echo "GOROOT=$(${go_cmd} env GOROOT)"
+    echo "GOPATH=$(${go_cmd} env GOPATH)"
+}
+
+run() {
+    _step "Check arguments"
+    _check_args "$@"
+
+    local ver="${1}"
+    local current_go_cmd="go"
+    local new_go_cmd="go${ver}"
+
+    _step "Check Go"
+    _check_cmd "${current_go_cmd}"
+
+    _step "Go info"
+    _print_go_info "${current_go_cmd}"
+
+    _step "Install Go ${ver}"
+    ${current_go_cmd} install "golang.org/dl/${new_go_cmd}@latest"
+    _check_cmd "${new_go_cmd}"
+    ${new_go_cmd} download
+
+    _step "Go ${ver} info"
+    _print_go_info "${new_go_cmd}"
+}
+
+run "$@"
