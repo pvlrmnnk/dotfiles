@@ -1,0 +1,16 @@
+export HOMEBREW_NO_ANALYTICS=1
+export HOMEBREW_NO_AUTO_UPDATE=1
+export HOMEBREW_NO_EMOJI=1
+export HOMEBREW_NO_ENV_HINTS=1
+export HOMEBREW_NO_INSECURE_REDIRECT=1
+export HOMEBREW_CLEANUP_PERIODIC_FULL_DAYS=10
+export HOMEBREW_CLEANUP_MAX_AGE_DAYS=30
+export HOMEBREW_UPDATE_REPORT_ONLY_INSTALLED=1
+
+export GPG_TTY="$(tty)"
+
+export GOPATH="${HOME}/go"
+
+export PATH="/usr/local/bin:$PATH" # brew
+export PATH="${GOPATH}/bin:${PATH}" # go
+export PATH="${HOME}/.local/bin:${PATH}" # local
