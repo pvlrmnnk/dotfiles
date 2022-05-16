@@ -1,66 +1,54 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 
 set -euo pipefail
 
-_step() {
-    local msg="${1}"
+source "${ZSH_SHARE_DIR}/utils.sh"
+source "${ZSH_SHARE_DIR}/go.sh"
 
-    local bold_white_color='\033[1;97m'
-    local bold_blue_color='\033[1;34m'
-    local no_color='\033[0m'
-
-    echo -e "${bold_blue_color}==> ${bold_white_color}${msg}${no_color}"
-}
-
-_check_args() {
-    if [ ${#} -eq 0 ]; then
-        echo "Not enough arguments"
-        return 1
-    elif [ ${#} -ge 2 ]; then
-        echo "Too many arguments"
-        return 1
-    fi
-
-    local ver="${1}"
-
-    echo "Go version to be installed: ${ver}"
-}
-
-_check_cmd() {
-    local cmd="${1}"
-
-    command -V "${cmd}"
-}
-
-_print_go_info() {
-    local go_cmd="${1}"
-
-    echo "GOVERSION=$(${go_cmd} env GOVERSION)"
-    echo "GOROOT=$(${go_cmd} env GOROOT)"
-    echo "GOPATH=$(${go_cmd} env GOPATH)"
+_usage() {
+    echo "Oh no!"
 }
 
 run() {
-    _step "Check arguments"
-    _check_args "$@"
+    if [ ${#} -eq 2 ]; then
+        local go_cmd="${1}"
+        local go_install_ver="${2}"
+    elif [ ${#} -eq 1 ]; then
+        local go_cmd="go"
+        local go_install_ver="${1}"
+    else
+        _usage
+        return 0
+    fi
 
-    local ver="${1}"
-    local current_go_cmd="go"
-    local new_go_cmd="go${ver}"
+    log_step "Params"
+    log_var "go_cmd" "${go_cmd}"
+    log_var "go_install_ver" "${go_install_ver}"
 
-    _step "Check Go"
-    _check_cmd "${current_go_cmd}"
+    local new_go_cmd="go${go_install_ver}"
+    local new_go_package="golang.org/dl/go${go_install_ver}@latest"
 
-    _step "Go info"
-    _print_go_info "${current_go_cmd}"
+    log_step "Verify go"
+    log_sub_step "Check go is available in the PATH"
+    check_cmd "${go_cmd}"
+    log_sub_step "Check go version"
+    go_version "${go_cmd}"
+    log_sub_step "Check go env"
+    go_env "${go_cmd}"
 
-    _step "Install Go ${ver}"
-    ${current_go_cmd} install "golang.org/dl/${new_go_cmd}@latest"
-    _check_cmd "${new_go_cmd}"
+    log_step "Install ${new_go_cmd}"
+    log_sub_step "Install ${new_go_cmd} shim"
+    go_install "${go_cmd}" "${new_go_package}"
+    log_sub_step "Check ${new_go_cmd} is available in the PATH"
+    check_cmd "${new_go_cmd}"
+    log_sub_step "Download pre-built binaries with shim"
     ${new_go_cmd} download
 
-    _step "Go ${ver} info"
-    _print_go_info "${new_go_cmd}"
+    log_step "Verify ${new_go_cmd}"
+    log_sub_step "Check go version"
+    go_version "${new_go_cmd}"
+    log_sub_step "Check go env"
+    go_env "${new_go_cmd}"
 }
 
 run "$@"
