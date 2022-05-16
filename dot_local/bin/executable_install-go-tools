@@ -1,0 +1,54 @@
+#!/usr/bin/env zsh
+
+set -euo pipefail
+
+source "${ZSH_SHARE_DIR}/utils.sh"
+source "${ZSH_SHARE_DIR}/go.sh"
+
+_usage() {
+    echo "Oh no!"
+}
+
+run() {
+    if [ ${#} -eq 1 ]; then
+        local go_cmd="${1}"
+    elif [ ${#} -eq 0 ]; then
+        local go_cmd="go"
+    else
+        _usage
+        return 0
+    fi
+
+    log_step "Params"
+    log_var "go_cmd" "${go_cmd}"
+
+    log_step "Verify go"
+    log_sub_step "Check go is available in the PATH"
+    check_cmd "${go_cmd}"
+    log_sub_step "Check go version"
+    go_version "${go_cmd}"
+    log_sub_step "Check go env"
+    go_env "${go_cmd}"
+
+    local tools=(
+        'gopls,golang.org/x/tools/gopls@latest'
+        'dlv,github.com/go-delve/delve/cmd/dlv@latest'
+        'golangci-lint,github.com/golangci/golangci-lint/cmd/golangci-lint@latest'
+        'gotests,github.com/cweill/gotests/gotests@latest'
+        'impl,github.com/josharian/impl@latest'
+        'gomodifytags,github.com/fatih/gomodifytags@latest'
+        'goplay,github.com/haya14busa/goplay/cmd/goplay@latest'
+    )
+
+    log_step "Install tools"
+    for row in "${tools[@]}"; do
+        while IFS=',' read -r tool_cmd tool_package; do
+            log_sub_step "Install ${tool_package}"
+            go_install ${go_cmd} "${tool_package}"
+            log_sub_step "Check ${tool_cmd} is available in the PATH"
+            check_cmd "${tool_cmd}"
+        done <<< "${row}"
+    done
+}
+
+run "$@"
