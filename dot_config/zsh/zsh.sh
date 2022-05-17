@@ -10,6 +10,7 @@ export HISTFILESIZE=1000000
 export HISTSIZE=1000000
 export HISTFILE="${HOME}/.zsh_history"
 
+setopt HIST_FIND_NO_DUPS
 setopt INC_APPEND_HISTORY
 
 unalias run-help >/dev/null 2>&1
