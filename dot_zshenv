@@ -1,7 +1,0 @@
-export CONFIG_DIR="${HOME}/.config"
-export CACHE_DIR="${HOME}/.cache"
-export SHARE_DIR="${HOME}/.local/share"
-export BIN_DIR="${HOME}/.local/bin"
-
-export ZSH_CONFIG_DIR="${CONFIG_DIR}/zsh"
-export ZSH_SHARE_DIR="${SHARE_DIR}/zsh"
