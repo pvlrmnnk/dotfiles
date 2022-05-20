@@ -6,12 +6,15 @@ export PATH="${BIN_DIR}:${PATH}"
 
 export ZSH_CONFIG_DIR="${CONFIG_DIR}/zsh"
 export ZSH_SHARE_DIR="${SHARE_DIR}/zsh"
-export HISTFILESIZE=1000000
-export HISTSIZE=1000000
+export HISTFILESIZE=10000
+export HISTSIZE=10000
 export HISTFILE="${HOME}/.zsh_history"
 
-setopt HIST_FIND_NO_DUPS
 setopt INC_APPEND_HISTORY
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_SAVE_NO_DUPS
+setopt HIST_FIND_NO_DUPS
+setopt HIST_REDUCE_BLANKS
 
 unalias run-help >/dev/null 2>&1
 unalias which-command >/dev/null 2>&1
