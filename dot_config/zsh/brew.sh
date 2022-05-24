@@ -8,9 +8,8 @@ export HOMEBREW_CLEANUP_MAX_AGE_DAYS=30
 export HOMEBREW_UPDATE_REPORT_ONLY_INSTALLED=1
 
 alias bw="brew" # BreW
-alias bwup="brew update" # BreW UPdate
-alias bwud="brew upgrade" # BreW UpgraDe
-alias bwo="brew outdated" # BreW Outdated
+alias bwo="brew update && brew outdated" # BreW Outdated
+alias bwup="brew upgrade" # BreW UPgrade
 alias bws="brew search" # BreW Search
 alias bwi="brew install" # BreW Install
 alias bwu="brew uninstall" # BreW Uninstall
