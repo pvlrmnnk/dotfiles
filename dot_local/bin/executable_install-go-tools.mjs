@@ -1,5 +1,7 @@
 #!/usr/bin/env zx
 
+/// <reference types="zx/globals" />
+
 const tools = {
     "gopls": "golang.org/x/tools/gopls@latest",
     "dlv": "github.com/go-delve/delve/cmd/dlv@latest",
